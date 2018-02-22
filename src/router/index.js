@@ -18,58 +18,58 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
-      path: '',
+      path: '/',
       name: 'Home',
       component: Home
     },
     {
-      path: 'lapor',
+      path: '/lapor',
       name: 'Post',
       component: PostIndex
     },
     {
-      path: 'lapor/:id',
+      path: '/lapor/:id',
       name: 'PostDetail',
       component: {
         template: '<div>Detail {{this.$route.params.id}} </div>'
       }
     },
     {
-      path: 'Pemberitahuan',
+      path: '/Pemberitahuan',
       name: 'Notif',
       component: NotifPage
     },
     {
-      path: 'baru',
+      path: '/baru',
       name: 'Report',
       component: NewReport,
       beforeEnter: loginRequired
     },
     {
-      path: 'u',
+      path: '/u',
       name: 'UserPage',
       component: UserPage,
       redirect: { name: 'User' },
       children: [
         {
-          path: 'user',
+          path: '/user',
           name: 'User',
           component: User,
           beforeEnter: nonLogin
         },
         {
-          path: 'login',
+          path: '/login',
           name: 'Login',
           component: Login,
           beforeEnter: nonLogin
         },
         {
-          path: 'register',
+          path: '/register',
           name: 'Register',
           component: Register
         },
         {
-          path: 'profile',
+          path: '/profile',
           name: 'Profile',
           component: Profile,
           beforeEnter: loginRequired
