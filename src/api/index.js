@@ -1,4 +1,4 @@
-const API_HOST = 'https://apiku.smasayk.tk/api/v1';
+const API_HOST = 'https://apiku.smasayk.tk/api/v1/';
 
 export default API_HOST;
 export const API_LOGIN = API_HOST+'auth/login';
