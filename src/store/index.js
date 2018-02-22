@@ -34,7 +34,7 @@ const store =  new Vuex.Store({
     actions: {
         GET_POST: function({commit},{ self }) {
             commit('LOADING', true);
-            axios.get('http://jsonplaceholder.typicode.com/posts')
+            axios.get('https://jsonplaceholder.typicode.com/posts')
             .then(function(response) {
                 commit(types.GET_POST, response.data);
                 commit('LOADING', false);
