@@ -1,0 +1,140 @@
+body {
+    background: #E0E4CC;
+}
+
+.section {
+    padding: 3rem 0rem;
+}
+
+.main-content {
+    margin-top: 10px;
+    width: 20px;
+}
+
+.w-main{
+    background: white;
+    min-height: 30em;
+}
+.icon-bar {
+    width: 100%;
+    background-color: #fff;
+    overflow: auto;
+}
+
+.icon-bar a {
+    float: left;
+    width: 25%;
+    text-align: center;
+    padding: 12px 0;
+    transition: all 0.3s ease;
+    color: black;
+    font-size: 28px;
+}
+
+.active {
+    background-color: #efefef !important;
+}
+
+.icon-bar .active{
+    color: #3273dc;
+}
+
+.message {
+    color: green;
+    background: white;
+}
+
+.card-footer a {
+    color: black;
+}
+
+.card-footer a:hover {
+    color: #3273dc;
+}
+
+.post .card:hover{
+    background: #f5f5f5;
+    cursor: pointer;
+}
+
+a .card-content .content{
+    text-decoration: none;
+    color: #333333;
+}
+
+
+.float{
+    position:fixed;
+    width:60px;
+    height:60px;
+    background-color:#0C9;
+    color:#FFF;
+    border-radius:50px;
+    text-align:center;
+    box-shadow: 2px 2px 3px #999;
+  }
+
+.my-float{
+    margin-top:22px;
+}
+
+@media (min-width:320px) {
+    /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */
+    .main-content {
+        width: 100%;
+    }
+    .float{
+        bottom:100px;
+        right:40px;
+    }
+}
+
+@media (min-width:480px) {
+    /* smartphones, Android phones, landscape iPhone */
+    .main-content {
+        width: 100%;
+    }
+    .float{
+        bottom:100px;
+        right:40px;
+    }
+}
+
+@media (max-width:600px) and (max-width:660px) {
+    /* portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android) */
+    .main-content {
+        width: 100%;
+    }
+    .float{
+        bottom:100px;
+        right:40px;
+    }
+}
+
+@media (min-width:661px) {
+    /* tablet, landscape iPad, lo-res laptops ands desktops */
+    .main-content {
+        width: 90%;
+    }
+    .float{
+        bottom:100px;
+        right:60px;
+    }
+}
+
+@media (min-width:1025px) {
+    /* big landscape tablets, laptops, and desktops */
+    .main-content {
+        width: 660px;
+    }
+    .float{
+        bottom:220px;
+        right:220px;
+    }
+    
+}
+
+.main-content .card {
+    margin: 12.5px 0;
+}
+
