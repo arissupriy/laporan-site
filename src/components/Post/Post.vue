@@ -1,5 +1,37 @@
 <template>
     <div>
+        <div class="container main-content box">
+            <div class="dropdown" v-bind:class="{ 'is-active': toggleDropdown}">
+                <div class="dropdown-trigger">
+                    <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" v-on:click="toggleDropdown = !toggleDropdown">
+                    <span>Pilih Kategori</span>
+                    <span class="icon is-small">
+                        <i class="fas fa-angle-down" aria-hidden="true"></i>
+                    </span>
+                    </button>
+                </div>
+                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                    <div class="dropdown-content">
+                    <a href="#" class="dropdown-item">
+                        Dropdown item
+                    </a>
+                    <a class="dropdown-item">
+                        Other dropdown item
+                    </a>
+                    <a href="#" class="dropdown-item is-active">
+                        Active dropdown item
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        Other dropdown item
+                    </a>
+                    <hr class="dropdown-divider">
+                    <a href="#" class="dropdown-item">
+                        With a divider
+                    </a>
+                    </div>
+                </div>
+                </div>
+        </div>
         <div class="card" v-for="post in dataPost" v-bind:key="post.id">
             <header class="card-header">
                 <p class="card-header-title">
@@ -38,12 +70,11 @@ export default {
     name: 'Post',
     data(){
         return {
-            title: 'Warga Rembang'
+            toggleDropdown: false
         }
     },
     methods: {
         getPost(){
-            console.log('memperbarui post');
             store.dispatch(types.GET_POST, { page_number: 1})
         },
         
@@ -53,8 +84,7 @@ export default {
     },
     created: function () {
         try {
-            document.title = 'Warga Rembang';
-            console.log('created');
+            document.title = 'Laporan Warga';
             this.getPost();
         } catch (error) {
             console.log(error)

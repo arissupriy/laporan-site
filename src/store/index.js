@@ -4,7 +4,7 @@ import axios from 'axios';
 import * as types from '../actions/types';
 import { stat } from 'fs';
 import * as API from '../api';
-import route from '../router'
+import route from '../router';
 
 Vue.use(Vuex);
 
@@ -52,7 +52,7 @@ const store =  new Vuex.Store({
             }, function(err) {
                 console.log(err);
                 commit('LOADING', false);
-            })
+            });
         },
         GET_POST_DETAIL: function({ commit },{ id }) {
             commit('LOADING', true);
@@ -64,7 +64,7 @@ const store =  new Vuex.Store({
             }, function(err) {
                 console.log(err);
                 commit('LOADING', false);
-            })
+            });
         },
         LOGIN: function({commit}, { data }){
             commit('LOGIN_PROCESS');
@@ -81,7 +81,7 @@ const store =  new Vuex.Store({
                     });
                     //resolve(error);
                 });
-            })
+            });
         },
         REGISTER: function({commit}, { data }){
             commit('REGISTER_PROCESS');
@@ -100,7 +100,7 @@ const store =  new Vuex.Store({
                        status: error.response.status 
                     });
                 });
-            })
+            });
         },
         LOGOUT: function({commit}, { token }){
             commit('LOGOUT_PROCESS');
@@ -114,26 +114,26 @@ const store =  new Vuex.Store({
             })
             .catch(function(error){
                 commit('LOGOUT_SUCCESS');
-            })
+            });
         },
         USER_PROFILE: function({commit}, { token }){
             axios.get(API.API_PROFILE, { headers: { Authorization: token }})
             .then(function(response){
-                commit('LOAD_PROFILE', {data: response.data})
+                commit('LOAD_PROFILE', {data: response.data});
             })
             .catch(function(error){
                 localStorage.clear();
-                route.push({name: 'User'})
-            })
+                route.push({name: 'User'});
+            });
         },
         GET_CATEGORY: function({ commit }){
             axios.get(API.COMPLAINT_CATEGORY)
             .then(function(response){
-                commit('GET_CATEGORY', { data: response.data })
+                commit('GET_CATEGORY', { data: response.data });
             })
             .catch(function(error){
 
-            })
+            });
         },
         NEW_LAPOR: function({commit}, { data, token }){
             commit('CREATE_PROCESS');
@@ -157,7 +157,7 @@ const store =  new Vuex.Store({
                 commit('CREATE_SUCCESS');
             }).catch(function(error) {
                 commit('CREATE_ERROR', { res: error.response });
-            })            
+            });            
         }
     },
     mutations: {
@@ -180,7 +180,7 @@ const store =  new Vuex.Store({
             state.userError.message = null;
         },
         LOGIN_SUCCESS (state, { data }) {
-            localStorage.setItem('auth', data.token)
+            localStorage.setItem('auth', data.token);
             state.isLogin = true;
             state.token = localStorage.getItem('auth');
             state.userLoading = false;
@@ -256,7 +256,7 @@ const store =  new Vuex.Store({
             c.finished = true;
             route.push({
                 name: 'Post'
-            })
+            });
         },
         GET_CATEGORY (state, { data }){
             state.categoryData = data;
@@ -292,6 +292,6 @@ const store =  new Vuex.Store({
             return state.registerSuccess;
         }
     }
-})
+});
 
 export default store;
