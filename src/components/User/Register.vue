@@ -45,25 +45,27 @@
             <div class="field">
             <label class="label">Password</label>
             <div class="control has-icons-left has-icons-right">
-                <input class="input" type="password" placeholder="*********" v-model="cred.password1" ref="password1">
+                <input class="input" v-show="!showPassword" placeholder="*********" v-model="cred.password1" ref="password1">
+                <span class="icon is-small is-left"  v-on:click="showPassword">
+                    <i class="fas fa-key show-password"></i>
+                </span>
+
+                
+                <input class="input" type="password" v-show="!!showPassword" placeholder="*********" v-model="cred.password1" ref="password2">
                 <span class="icon is-small is-left">
-                <i class="fas fa-key"></i>
+                    <i class="fas fa-key"></i>
                 </span>
                 
+                </div>
             </div>
-            </div>
-
             <div class="field">
-            <label class="label">Password sekali lagi</label>
-            <div class="control has-icons-left has-icons-right">
-                <input class="input" type="password" placeholder="*********" v-model="cred.password2" ref="password2">
-                <span class="icon is-small is-left">
-                <i class="fas fa-key"></i>
-                </span>
-                
+                <div class="control">
+                    <label class="checkbox">
+                    <input type="checkbox" value="1" ref="syarat" v-on:click="showPassword = !showPassword">
+                        {{!showPassword? 'Tutup':'Buka'}} Password
+                    </label>
+                </div>
             </div>
-            </div>
-
             <div class="field">
             <label class="label">Handphone</label>
             <div class="control has-icons-left has-icons-right">
@@ -114,7 +116,8 @@ export default {
                 phone: null,
                 name: null,
                 syarat: null
-            }
+            },
+            showPassword: true
         }
     },
     methods: {
@@ -124,11 +127,8 @@ export default {
         submit(){
             if(!this.cred.syarat){
                 this.$refs.syarat.focus()
-            } else if (!this.checkPassword(this.cred.password1, this.cred.password2)){
-                this.registerStatus.status = true;
-                this.registerStatus.message = 'Password1 dan password2 harus sama';
-                this.$refs.password2.focus();
-            } else if (this.checkNull(this.cred.name)){
+            } 
+             else if (this.checkNull(this.cred.name)){
                 this.$refs.name.focus();
             } else if (this.checkNull(this.cred.username)){
                 this.$refs.username.focus();
@@ -205,5 +205,7 @@ export default {
 </script>
 
 <style>
-
+    .show-password {
+        cursor: pointer;
+    }
 </style>

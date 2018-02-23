@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="container main-content box">
+        <div class="container main-content">
             <div class="dropdown" v-bind:class="{ 'is-active': toggleDropdown}">
                 <div class="dropdown-trigger">
                     <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" v-on:click="toggleDropdown = !toggleDropdown">
@@ -75,7 +75,7 @@ export default {
     },
     methods: {
         getPost(){
-            store.dispatch(types.GET_POST, { page_number: 1})
+            store.dispatch(types.GET_POST, { page_number: 1 })
         },
         
         showDetail(id){
