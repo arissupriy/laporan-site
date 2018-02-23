@@ -11,6 +11,7 @@ Vue.use(Vuex);
 const store =  new Vuex.Store({
     state: {
         posts: [],
+        posts_detail: null,
         loading: false,
         userLoading: false,
         user: {
@@ -38,9 +39,25 @@ const store =  new Vuex.Store({
         categoryData: []
     },
     actions: {
-        GET_POST: function({commit},{ self }) {
+        GET_POST: function({commit},{ page_number }) {
             commit('LOADING', true);
-            axios.get('https://jsonplaceholder.typicode.com/posts')
+            axios.get(API.COMPLAINT_DATA, {
+                params: {
+                    page: page_number
+                }
+            })
+            .then(function(response) {
+                commit(types.GET_POST, response.data);
+                commit('LOADING', false);
+            }, function(err) {
+                console.log(err);
+                commit('LOADING', false);
+            })
+        },
+        GET_POST_DETAIL: function({ commit },{ id }) {
+            commit('LOADING', true);
+            const url = API.COMPLAINT_BY_ID+'/'+id;
+            axios.get(url)
             .then(function(response) {
                 commit(types.GET_POST, response.data);
                 commit('LOADING', false);
@@ -120,27 +137,35 @@ const store =  new Vuex.Store({
         },
         NEW_LAPOR: function({commit}, { data, token }){
             commit('CREATE_PROCESS');
-            return new Promise((resolve, reject) => {
-                axios.post(API.COMPLAINT_CREATE, {
-                    headers: { Authorization: token },
-                    data: {
-                        category_id: data.category_id,
-                        title: data.title,
-                        description: data.more,
-                        photos: data.image
-                    }
-                }).then(function(response){
-                    commit('CREATE_SUCCESS');
-                    resolve(response);
-                }).catch(function(error){
-                    commit('CREATE_ERROR', { res: error.response.status });
-                })
-            })
+            const credentials = {
+                category_id: data.category_id,
+                title: data.title,
+                description: data.more,
+                photos: data.image
+            };
+
+            const HTTP = axios.create({
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: token
+                }
+
+            });
+
+            HTTP.post(API.COMPLAINT_CREATE, credentials)
+            .then(function(response) {
+                commit('CREATE_SUCCESS');
+            }).catch(function(error) {
+                commit('CREATE_ERROR', { res: error.response });
+            })            
         }
     },
     mutations: {
         GET_POST (state, payload) {
             state.posts = payload;
+        },
+        GET_POST_DETAIL (state, payload) {
+            state.posts_detail = payload;
         },
         LOADING (state, bool){
             state.loading = bool;
@@ -229,6 +254,9 @@ const store =  new Vuex.Store({
             c.isLoading = false;
             c.error = false;
             c.finished = true;
+            route.push({
+                name: 'Post'
+            })
         },
         GET_CATEGORY (state, { data }){
             state.categoryData = data;

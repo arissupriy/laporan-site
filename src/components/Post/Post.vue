@@ -1,9 +1,9 @@
 <template>
     <div>
-        <div class="card" v-for="post in dataPost">
+        <div class="card" v-for="post in dataPost" v-bind:key="post.id">
             <header class="card-header">
                 <p class="card-header-title">
-                    {{post.title}}
+                    {{post.title}} ({{post.category_name}})
                 </p>
                 <a href="#" class="card-header-icon" aria-label="more options">
                     <span class="icon">
@@ -11,10 +11,9 @@
                     </span>
                 </a>
             </header>
-            <div class="card-content" v-on:click=showDetail(post.id)>
+            <div class="card-content content-post" v-on:click=showDetail(post.id)>
                 <div class="content">
-                    {{post.body}}
-                    <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                    {{post.description}}
                 </div>
                 </div>
             <footer class="card-footer">
@@ -45,7 +44,7 @@ export default {
     methods: {
         getPost(){
             console.log('memperbarui post');
-            store.dispatch(types.GET_POST, { self: this })
+            store.dispatch(types.GET_POST, { page_number: 1})
         },
         
         showDetail(id){
@@ -69,5 +68,7 @@ export default {
 }
 </script>
 <style>
-
+    .content-post{
+        cursor: pointer;
+    }
 </style>

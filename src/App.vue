@@ -30,6 +30,7 @@ import store from './store';
 
 import './assets/fa.js';
 
+
 Vue.component("IconBar", IconBar);
 Vue.component("Header", Header);
 

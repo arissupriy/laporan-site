@@ -3,6 +3,7 @@ import Router from 'vue-router';
 
 import Home from '../components/Home';
 import PostIndex from '../components/Post';
+import PostDetail from '../components/Post/Detail';
 import NotifPage from '../components/Notif';
 import NewReport from '../components/Report/New';
 import User from '../components/User/User';
@@ -30,9 +31,7 @@ export default new Router({
     {
       path: '/lapor/:id',
       name: 'PostDetail',
-      component: {
-        template: '<div>Detail {{this.$route.params.id}} </div>'
-      }
+      component: PostDetail
     },
     {
       path: '/Pemberitahuan',

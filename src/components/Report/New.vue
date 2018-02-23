@@ -76,8 +76,8 @@
 
         <div class="field is-grouped">
           <div class="control">
-            <button v-if="!isLoading" class="button is-link" v-on:click="submit">Submit</button>
-            <button v-else-if="!!isLoading" class="button is-loading is-link" v-on:click="submit">Submit</button>
+            <button v-if="!isLoading" class="button is-link" type="submit">Submit</button>
+            <button v-else-if="!!isLoading" class="button is-loading is-link" type="submit">Submit</button>
           </div>
           <div class="control">
             <button class="button is-text" >Cancel</button>
@@ -90,7 +90,7 @@
 
 <script>
 import Vue from 'vue';
-import { IMAGE_URL } from '../../api'
+import { IMAGE_URL } from '../../api';
 
 export default {
     name: 'NewReport',
@@ -156,8 +156,14 @@ export default {
           const credential = {
             title: cred.title,
             more: cred.more,
-            image: cred.image? cred.image : null
+            image: cred.image? cred.image : null,
+            category_id: this.category
           }
+
+          this.$store.dispatch('NEW_LAPOR', {
+            data: credential,
+            token: this.token
+          })
           
         }
         
