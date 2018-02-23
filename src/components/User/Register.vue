@@ -86,7 +86,9 @@
 
             <div class="field is-grouped">
             <div class="control">
-                <button class="button is-link" v-on:click="submit">Submit <i v-if="registerProcess" class="fas fa-spin fa-spinner"></i></button>
+                <button v-if="!registerProcess" class="button is-link" v-on:click="submit">Register</button>
+                <button v-else-if="!!registerProcess" class="button is-loading is-link" v-on:click="submit">Submit</button>
+                
             </div>
             <div class="control">
                 <button class="button is-text" v-on:click="back">Batalkan</button>
@@ -145,26 +147,28 @@ export default {
                     name: this.cred.name
                 }
 
-                
-
                 try {
-                    store.dispatch('REGISTER', { data: credentials })                    
-                    
 
-                    console.log(store.state.regSuccess);
-                    console.log(store.state.regSuccess);
-                    
-                    if (store.state.regSuccess){
-                        this.cred = {
-                            username: null,
-                            password1: null,
-                            password2: null,
-                            email: null,
-                            phone: null,
-                            name: null,
-                            syarat: null
+                    this.$store.dispatch('REGISTER', { data: credentials })
+                    .then((res) => {
+                        if (this.$store.state.userError.status){
+                            this.$refs.error.focus();
+                        } 
+
+                        if (this.$store.state.registerSuccess.status){
+                            this.cred = {
+                                username: null,
+                                password1: null,
+                                password2: null,
+                                email: null,
+                                phone: null,
+                                name: null,
+                                syarat: null
+                            }
                         }
-                    }
+                        
+                    })                
+                    
                 } catch (error) {
                     console.log(error);
                 }

@@ -29,7 +29,13 @@ const store =  new Vuex.Store({
             message: 'test'
         },
         regSuccess: false,
-        logoutLoading: false
+        logoutLoading: false,
+        createComplaint: {
+            isLoading: false,
+            finished: false,
+            error: false
+        },
+        categoryData: []
     },
     actions: {
         GET_POST: function({commit},{ self }) {
@@ -52,8 +58,6 @@ const store =  new Vuex.Store({
                     commit('LOGIN_SUCCESS', {data: response.data});
                     resolve(response.data);
                 }).catch(function(error){
-                    console.log(error);
-                    console.log(error.response);
                     commit('LOGIN_ERROR', { 
                         status: error.response.status, 
                         message: 'Maaf Login Gagal'
@@ -63,20 +67,23 @@ const store =  new Vuex.Store({
             })
         },
         REGISTER: function({commit}, { data }){
-            commit('REGISTER_PROCESS')
-            axios.post(API.API_REGISTER, { 
-                username: data.username, 
-                email: data.email, 
-                password: data.password, 
-                phone: data.phone, 
-                name: data.name
-            }).then(function(response){
-                commit('REGISTER_SUCCESS');
-            }).catch(function(error){
-                commit('REGISTER_ERROR', {
-                   status: error.response.status 
+            commit('REGISTER_PROCESS');
+            new Promise((resolve, reject) => {
+                axios.post(API.API_REGISTER, { 
+                    username: data.username, 
+                    email: data.email, 
+                    password: data.password, 
+                    phone: data.phone, 
+                    name: data.name
+                }).then(function(response){
+                    commit('REGISTER_SUCCESS');
+                    resolve(response);
+                }).catch(function(error){
+                    commit('REGISTER_ERROR', {
+                       status: error.response.status 
+                    });
                 });
-            });
+            })
         },
         LOGOUT: function({commit}, { token }){
             commit('LOGOUT_PROCESS');
@@ -100,6 +107,34 @@ const store =  new Vuex.Store({
             .catch(function(error){
                 localStorage.clear();
                 route.push({name: 'User'})
+            })
+        },
+        GET_CATEGORY: function({ commit }){
+            axios.get(API.COMPLAINT_CATEGORY)
+            .then(function(response){
+                commit('GET_CATEGORY', { data: response.data })
+            })
+            .catch(function(error){
+
+            })
+        },
+        NEW_LAPOR: function({commit}, { data, token }){
+            commit('CREATE_PROCESS');
+            return new Promise((resolve, reject) => {
+                axios.post(API.COMPLAINT_CREATE, {
+                    headers: { Authorization: token },
+                    data: {
+                        category_id: data.category_id,
+                        title: data.title,
+                        description: data.more,
+                        photos: data.image
+                    }
+                }).then(function(response){
+                    commit('CREATE_SUCCESS');
+                    resolve(response);
+                }).catch(function(error){
+                    commit('CREATE_ERROR', { res: error.response.status });
+                })
             })
         }
     },
@@ -180,8 +215,33 @@ const store =  new Vuex.Store({
             state.userError.status = true;
             state.registerSuccess.status = false;
         },
-        LOAD_PROFILE(state, {data}){
+        LOAD_PROFILE (state, {data}){
             state.user = data;
+        },
+        CREATE_PROCESS (state){
+            const c = state.createComplaint;
+            c.isLoading = true;
+            c.error = false;
+            c.finished = false;
+        },
+        CREATE_SUCCESS (state){
+            const c = state.createComplaint;
+            c.isLoading = false;
+            c.error = false;
+            c.finished = true;
+        },
+        GET_CATEGORY (state, { data }){
+            state.categoryData = data;
+        },
+        CREATE_ERROR (state, { res }){
+            if(res.status == 401){
+                localStorage.clear();
+                route.push({name: 'Login'});
+            }
+            const c = state.createComplaint;
+            c.isLoading = false;
+            c.error = true;
+            c.finished = true;
         }
     },
     getters: {

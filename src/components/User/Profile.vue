@@ -118,10 +118,13 @@ export default {
     },
     created(){
         this.getProfile()
+        
     },
     computed: {
         profile(){
-            return store.state.user;
+            const prof = store.state.user;
+            document.title = 'Halo '+ prof.username
+            return prof;
         },
         logoutLoading(){
             return this.$store.state.logoutLoading;
