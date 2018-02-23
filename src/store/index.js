@@ -36,7 +36,17 @@ const store =  new Vuex.Store({
             finished: false,
             error: false
         },
-        categoryData: []
+        categoryData: [],
+        getComments: {
+            isLoading: false,
+            error: false,
+            data: []
+        },
+        commentsData: [],
+        createComment: {
+            isLoading: false,
+            error: false
+        }
     },
     actions: {
         GET_POST: function({commit},{ page_number }) {
@@ -158,7 +168,44 @@ const store =  new Vuex.Store({
             }).catch(function(error) {
                 commit('CREATE_ERROR', { res: error.response });
             });            
-        }
+        },
+        GET_COMMENTS: function({commit}, { complaint }){
+            axios.get(API.COMPLAINT_COMMENT, { 
+                params: {
+                    complaint_id: complaint
+                }
+            })
+            .then(function(response){
+                commit('GET_COMMENT_SUCCESS', {res: response.data});
+            })
+            .catch(function(error){
+                console.log(error);
+            });
+        },
+        CREATE_COMMENT: function({commit, dispatch}, { data, token }){
+            commit('CREATE_COMMENT_PROCESS');
+            const credentials = {
+                complaint_id: data.complaint_id,
+                comment: data.comment
+            };
+            
+            const HTTP = axios.create({
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: token
+                }
+
+            });
+
+            HTTP.post(API.COMPLAINT_COMMENT_CREATE, credentials)
+            .then(function(response) {
+                commit('CREATE_COMMENT_SUCCESS');
+                dispatch('GET_COMMENTS', { token: localStorage.getItem('auth'), complaint: data.complaint_id});
+            }).catch(function(error) {
+                commit('CREATE_COMMENT_PROCESS', { res: error.response });
+            });            
+        },
+        
     },
     mutations: {
         GET_POST (state, payload) {
@@ -270,6 +317,27 @@ const store =  new Vuex.Store({
             c.isLoading = false;
             c.error = true;
             c.finished = true;
+        },
+        GET_COMMENT_PROCESS (state) {
+            state.getComments.isLoading = true;
+            state.getComments.error = false;
+        },
+        GET_COMMENT_SUCCESS (state, { res }) {
+            state.commentsData = res;
+            state.getComments.isLoading = false;
+            state.getComments.error = false;            
+        },
+        CREATE_COMMENT_PROCESS (state){
+            state.createComment.isLoading = true;
+            state.createComment.error = false;
+        },
+        CREATE_COMMENT_SUCCESS(state){
+            state.createComment.isLoading = false;
+            state.createComment.error = false;
+        },
+        CREATE_COMMENT_ERROR(state, { res }){
+            state.createComment.isLoading = false;
+            state.createComment.error = true;
         }
     },
     getters: {
@@ -290,6 +358,9 @@ const store =  new Vuex.Store({
         },
         registerSuccess: state => {
             return state.registerSuccess;
+        }, 
+        comments: state => {
+            return state.getComments.data;
         }
     }
 });
